@@ -5,7 +5,12 @@
     - Realizar una rotación de +75° (sentido contrario a las manecillas de reloj) sobre el punto central del polígono. 
     - Al final, deben quedar cruzados los dos polígonos, el inicial y el rotado (pero distinguiéndose en uno del otro, ya que hay un ángulo de giro de 75°).
 -->
-
+<!-- VIDEOS VISTOS:
+            "JavaScript - Ejercicio 192: Encontrar el Valor Mínimo y Máximo de un Arreglo con la Clase Math" https://www.youtube.com/watch?v=Q67Qd6UDzGg
+            "JavaScript - Ejercicio 835: Crear Arreglo a partir de Dos Arreglos y Formar Pares" https://www.youtube.com/watch?v=KEnzl-xht_8
+            "Buscar un elemento en un arreglo en javascript, la función find de JS" https://www.youtube.com/watch?v=en5f0sYFJZE
+            "JavaScript - Ejercicio 974: Definir Función para Obtener el Segundo Mínimo y Máximo de un Arreglo" https://www.youtube.com/watch?v=9ICiiIDEarA
+-->
 <!--REFERENCIA: Canvas 03 Rotación - brankoh 
     ENLACE: https://www.youtube.com/watch?v=Of5BqqKepCU-->
 
@@ -15,38 +20,41 @@
 
         //Calcula el centro geométrico de cualquier figura
         function centroGeom(coordenada) {
-            /*¿CÓMO HACERLO?
-                1. Buscar en el arreglo el elemento de posición par más grande y más pequeño (estas son las posiciónes en x)
-                2. Restar ambas x, para luego dividir entre dos y sumar ese valor a la x más pequeña.
-                3. Repetir pasos 1 y 2 para los elementos de posición impar (posiciónes de y).
-                4. Se registran los valores en el vector de traslación tr = (x,y).
-                5. Retornar tr.
+           /*PROCEDIMIENTO IDEAL A REALIZAR:
+                1. Con un ciclo for, se recorre de dos en dos las posiciones el arreglo.
+                2. Buscar mínimos y máximos de X a partir de la posición i.
+                3. Buscar mínimos y máximos de Y a partir de la posición i+1.
+                4. Operar los valores minX y maxX para hallar la posición central en X.
+                5. Paso 4 pero con Y.
+                6. Registrar pasos 4 y 5 en una variable que se defina como el vector de traslación.
+                7. Retornar tr.
             */
+           var minX=coordenada[0], minY=coordenada[1]; maxX=coordenada[0], maxY=coordenada[1]; //Define las variables de los máximos y mínimos de X y Y.
 
-            /*VIDEOS VISTOS:
-            "JavaScript - Ejercicio 192: Encontrar el Valor Mínimo y Máximo de un Arreglo con la Clase Math" https://www.youtube.com/watch?v=Q67Qd6UDzGg
-            "JavaScript - Ejercicio 835: Crear Arreglo a partir de Dos Arreglos y Formar Pares" https://www.youtube.com/watch?v=KEnzl-xht_8
-            "Buscar un elemento en un arreglo en javascript, la función find de JS" https://www.youtube.com/watch?v=en5f0sYFJZE
-            "JavaScript - Ejercicio 974: Definir Función para Obtener el Segundo Mínimo y Máximo de un Arreglo" https://www.youtube.com/watch?v=9ICiiIDEarA
-            */
+            for (var i = 2; i <coordenada.length; i+=2){//PASO 1: Recorre el arreglo a partir de la segunda posición porque ya están definidas la posición 0 y 1 como mínimas.
+                                                        //El i+=2 quiere decir que lo recorre de dos en dos.
 
-            /*PRUEBA DE PROCEDIMIENTO
-            //xmin = Math.min.apply(null,coord)
-            //xmax = Math.max.apply(null,coord)
-            let xmin= coord.find(elemento => elemento == Math.min.apply(null,coord)) // Busca en el arreglo el valor más pequeño y lo guarda en la cariable xmin
-            let xmax= coord.find(elemento => elemento == Math.max.apply(null,coord)) // Busca en el arreglo el valor más grande y lo guarda en la cariable xmax
-            */
+                if(coordenada[i] < minX){ //PASO 2: Condicional en el que, si minX no es el de la primera posición, busca el valor mínimo de X en el arreglo.
+                    minX = coordenada [i];//Se utiliza la posición i, de tal forma que recorre de dos en dos el arreglo a partir de la posición 2.
+                }
+                if(coordenada[i] > maxX){ //Condicional que busca el valor más alto de X en el arreglo.
+                    maxX = coordenada [i];
+                }
+                
+                if (coordenada[i+1] < minY){//PASO 3: Aplica el mismo procedimiento que en X, pero a partir de la posición 3 (y de dos en dos también).
+                    minY = coordenada [i+1];
+                }
+             
+                if (coordenada[i+1] < maxY){
+                    maxY = coordenada[i+1];
+                }
+            }
+            x= ((maxX-minX)/2)+40; //PASO 4
+            y= ((maxY-minY)/2)+40; //PASO 5
 
-            /*PREGUNTAS:
-            1. ¿Cómo hacer para que recorra las posiciones pares o impares del arreglo? Pensé en formar pares como en el segundo video, pero creo que me estaría enredando mucho...
-            */
-            
-            tr = [64, 89] //vector de traslación vacío        
-            // ....
-            x= ((87-40)/2)+40;
-            y = ((138-40)/2)+40;
+            tr=[x, y];//PASO 6: Vector de traslación
 
-            return tr;
+            return  tr; //PASO 7: Graba el vector "tr" en "coordenada".
         }
 
         //Función que traza la letra
@@ -63,6 +71,7 @@
         }
 
         //VARIABLES---------------------
+
         //Referenciar el elemento <canvas> y definir contexto y dimensiones.
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
